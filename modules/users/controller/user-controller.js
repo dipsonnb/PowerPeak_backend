@@ -188,3 +188,20 @@ export const resetPassword = async (req, res) => {
     console.log("Error resetting password", error);
   }
 };
+
+export const checkUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+    res
+      .status(200)
+      .json({ success: true, user: { ...user._doc, password: undefined } });
+  } catch (error) {
+    console.log("error checking user", error);
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
